@@ -15,13 +15,19 @@ RUN apt-get update && \
 # Ensure Rust and Cargo are available in the PATH
 ENV PATH="/root/.cargo/bin:${PATH}"
 
+# Use build arguments for passing the API key securely
+ARG OPENAI_API_KEY
+
+# Set environment variable from the build argument
+ENV OPENAI_API_KEY=$OPENAI_API_KEY
+
 # Install the application using pip with git+https
 RUN pip install git+https://github.com/openai/swarm.git
 
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-# Ensure swarm.py is executable
+# Ensure main.py (formerly swarm.py) is executable
 RUN chmod +x /app/openai_swarm.py
 
 # Specify the default command to run when the container starts
